@@ -1,7 +1,8 @@
-       IDENTIFICATION                DIVISION.
+       IDENTIFICATION          DIVISION.
        PROGRAM-ID. CLIENTES.
-       ENVIRONMENT                   DIVISION.
-       DATA                          DIVISION.
-       PROCEDURE                     DIVISION.
-           DISPLAY "CLIENTES".  
+      * COMENTARIO
+       ENVIRONMENT             DIVISION.
+       DATA                    DIVISION.
+       PROCEDURE               DIVISION.
+           DISPLAY "CLIENTES".
            STOP RUN.
