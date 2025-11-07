@@ -1,5 +1,5 @@
        IDENTIFICATION        DIVISION.
-       PROGRAM-ID. EXREPETINDOACOES.
+       PROGRAM-ID. EXREPETINDOACOESCONTROL.
       * COMENTARIO
        ENVIRONMENT           DIVISION.
        CONFIGURATION         SECTION.
@@ -8,18 +8,24 @@
            
        DATA                  DIVISION.
        WORKING-STORAGE       SECTION.
-       01  WRK-NOME          PICTURE X(20)   VALUE SPACES.
-       01  WRK-SALDO         PICTURE S9(10)  COMP VALUE ZEROS.
-       01  WRK-SALDO-ED      PICTURE Z.ZZZ.ZZZ.ZZ9,99.
-       01  WRK-TIPO-CONTA    PICTURE 9.
+       01  WRK-NOME                PICTURE X(20)   VALUE SPACES.
+       01  WRK-SALDO               PICTURE S9(10)  COMP VALUE ZEROS.
+       01  WRK-SALDO-ED            PICTURE Z.ZZZ.ZZZ.ZZ9,99.
+       01  WRK-TIPO-CONTA          PICTURE 9.
+       01  WRK-CONTADOR            PICTURE 9(03) USAGE COMP.
+       01  WRK-CONTADOR-VALIDO     PICTURE 9(03) USAGE COMP.
+       01  WRK-CONTADOR-INVALIDO   PICTURE 9(03) USAGE COMP.
 
        PROCEDURE             DIVISION.
        0100-PRINCIPAL        SECTION.
            PERFORM  0200-INICIAR.
-           PERFORM  0300-PROCESSAR UNTIL WRK-TIPO-CONTA EQUAL 9.
-      * UNTIL = processe ate eu digitar 9
+           PERFORM  0300-PROCESSAR VARYING WRK-CONTADOR FROM 0 BY 1 
+                                   UNTIL WRK-TIPO-CONTA EQUAL 9.
+      * VARYING = contado add mais 1 a cada loop 
+
            PERFORM  0400-FINALIZAR.         
            STOP RUN.
+
        0100-FIM. EXIT.
 
       *----------------------INICIAR
@@ -40,6 +46,7 @@
               DISPLAY WRK-NOME
               MOVE WRK-SALDO TO WRK-SALDO-ED
               DISPLAY "SALDO " WRK-SALDO-ED
+              ADD 1 TO WRK-CONTADOR-VALIDO
            ELSE
               EVALUATE TRUE
                WHEN WRK-SALDO LESS 5000
@@ -47,6 +54,7 @@
                WHEN WRK-TIPO-CONTA NOT EQUAL 1 OR
                     WRK-TIPO-CONTA NOT EQUAL 2
                    DISPLAY "TIPO DE CONTA NAO EXISTE"
+                   ADD 1 TO WRK-CONTADOR-INVALIDO
               END-EVALUATE
            END-IF.
        0300-FIM. EXIT.
@@ -54,5 +62,10 @@
       *----------------------FINALIZAR
        0400-FINALIZAR        SECTION.
        DISPLAY "-----------------------".
-       DISPLAY "--- FIM DO PROGRAMA ---".
+       DISPLAY "----- ESTATISTICA -----".
+       DISPLAY "CLIENTES LIDOS: " WRK-CONTADOR.
+       DISPLAY "CLIENTE VALIDOS: " WRK-CONTADOR-VALIDO.
+       DISPLAY "CLIENTE INVALIDOS: " WRK-CONTADOR-INVALIDO.
+       DISPLAY "-----------------------".
+       DISPLAY "--- FIM DE PROGRAMA ---".
        0400-FIM. EXIT.  
